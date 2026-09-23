@@ -44,15 +44,16 @@
 - [x] `MODEL_CARD.md`, `README.md`, `docs/HF_URLS.md`
 - [ ] `--execute` after Colab training produces `pytorch_lora_weights.safetensors` + `HF_TOKEN` set
 
-### Phase 7 — Quality gates (IN PROGRESS)
-- [x] ruff clean, pytest 18 passed (at c544d75)
-- [ ] Florence caption pass → re-run ruff+pytest+commit
-- [ ] Orchestrate multi-model expert review → apply fixes → re-run tests → commit
-- [ ] Final verification sweep (dataset integrity, notebook, all CLIs)
+### Phase 7 — Quality gates (DONE)
+- [x] ruff clean, pytest 18 passed
+- [x] Florence-2 captions: 25 unique + trigger verified
+- [x] Multi-model orchestrate review (6/29 models scored; top gpt-oss-120b 86/100) — applied real fixes: clear gated-model errors in `inference_eval.py`, instance-dir/image validation + launch error handling in `train_flux_lora.py`, HF upload exception wrapping; rejected hallucinated findings (no hardcoded tokens/paths in repo)
+- [x] Final CLI verification: ruff, pytest, inference --check, train --dry-run, upload --dry-run all green
 
-### Phase 8 — Delivery (PENDING)
-- [ ] Create GitHub repo under `https://github.com/Shehab-Hegab` and push `main`
-- [ ] Final report: HF URL structure + GitHub URL + status of each deliverable
+### Phase 8 — Delivery (DONE — except live HF execute)
+- [x] GitHub repo created + pushed: `https://github.com/Shehab-Hegab/flux-islamic-parametric`
+- [x] PLAN.md living file at repo root (this file)
+- [ ] `upload_to_hf.py --execute` after Colab training + `HF_TOKEN` (user/Colab step)
 
 ---
 
@@ -79,13 +80,14 @@ python upload_to_hf.py --execute
 | Deliverable | Status |
 |---|---|
 | Dataset 25×≥1024² + manifest | DONE |
-| Captions (template fallback) | DONE |
-| Captions (Florence-2) | PENDING |
+| Captions Florence-2 (25 unique + trigger) | DONE |
 | train_flux_lora.py + vendored diffusers script | DONE |
 | Colab notebook | DONE |
 | inference_eval.py | DONE |
 | upload_to_hf.py + model card + HF URLs docs | DONE (execute after training) |
 | Tests + lint | GREEN (18 passed) |
-| GitHub push to Shehab-Hegab | PENDING |
-| Multi-model orchestrate review | PENDING |
+| GitHub push to Shehab-Hegab | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric |
+| Multi-model orchestrate review | DONE (fixes applied) |
 | Live HF upload (needs HF_TOKEN + trained weights) | PENDING USER/COLAB |
+
+**Last updated after:** Florence captions + orchestrate review + GitHub push (session 2026-09-23).

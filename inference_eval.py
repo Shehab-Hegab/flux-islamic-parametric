@@ -41,13 +41,24 @@ def build_pipeline(lora_path: str | None):
     import torch
     from diffusers import FluxPipeline
 
-    pipe = FluxPipeline.from_pretrained(BASE_MODEL, torch_dtype=torch.bfloat16)
+    try:
+        pipe = FluxPipeline.from_pretrained(BASE_MODEL, torch_dtype=torch.bfloat16)
+    except Exception as exc:
+        raise RuntimeError(
+            f"failed to load {BASE_MODEL} — accept the FLUX.1-dev license and set "
+            f"HF_TOKEN (gated model). Original error: {exc}"
+        ) from exc
     if lora_path:
         weights = Path(lora_path)
         if weights.is_dir() and (weights / WEIGHTS_FILENAME).exists():
             weights = weights / WEIGHTS_FILENAME
-        pipe.load_lora_weights(str(weights.parent) if weights.suffix else str(weights),
-                               weight_name=weights.name if weights.suffix else None)
+        try:
+            pipe.load_lora_weights(
+                str(weights.parent) if weights.suffix else str(weights),
+                weight_name=weights.name if weights.suffix else None,
+            )
+        except Exception as exc:
+            raise RuntimeError(f"failed to load LoRA weights from {lora_path}: {exc}") from exc
     pipe.enable_model_cpu_offload()
     return pipe
 
@@ -124,7 +135,14 @@ def main(argv: list[str] | None = None) -> int:
     has_lora = (lora / WEIGHTS_FILENAME).exists() if lora.is_dir() else lora.exists()
     if not has_lora:
         print(f"[warn] LoRA weights not found at {lora}; generating base-only comparison against saved columns")
-    path = generate_grids(str(args.lora_path) if has_lora else None, Path(args.out), args.limit)
+    try:
+        path = generate_grids(str(args.lora_path) if has_lora else None, Path(args.out), args.limit)
+    except RuntimeError as exc:
+        print(f"[error] {exc}", file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print(f"[error] evaluation failed: {exc}", file=sys.stderr)
+        return 1
     print(f"grid saved: {path}")
     return 0
 

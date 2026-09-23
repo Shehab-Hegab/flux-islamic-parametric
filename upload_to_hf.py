@@ -175,7 +175,13 @@ def main(argv: list[str] | None = None) -> int:
     if not weights.exists():
         print(f"[error] weights not found: {weights} — train first or pass --weights", file=sys.stderr)
         return 1
-    run_upload(plan)
+    try:
+        run_upload(plan)
+    except SystemExit:
+        raise
+    except Exception as exc:
+        print(f"[error] Hugging Face upload failed: {exc}", file=sys.stderr)
+        return 1
     return 0
 
 

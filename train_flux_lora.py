@@ -125,6 +125,10 @@ def main(argv: list[str] | None = None) -> int:
     if not instance_path.is_dir():
         print(f"[error] instance dir missing: {instance_path}", file=sys.stderr)
         return 1
+    images = sorted(instance_path.glob("*.jpg")) + sorted(instance_path.glob("*.png"))
+    if not images:
+        print(f"[error] no training images in {instance_path} — run download_or_synthetic_dataset.py first", file=sys.stderr)
+        return 1
 
     try:
         ensure_train_script()
@@ -137,10 +141,16 @@ def main(argv: list[str] | None = None) -> int:
     env = os.environ.copy()
     import subprocess
 
-    proc = subprocess.run(cmd, env=env)
+    try:
+        proc = subprocess.run(cmd, env=env)
+    except OSError as exc:
+        print(f"[error] failed to launch training: {exc}", file=sys.stderr)
+        return 1
     weights = Path(args.output_dir) / WEIGHTS_FILENAME
     if proc.returncode == 0 and weights.exists():
         print(f"LoRA weights saved: {weights}")
+    elif proc.returncode == 0 and not weights.exists():
+        print(f"[warn] training exited 0 but {weights} not found", file=sys.stderr)
     return proc.returncode
 
 
