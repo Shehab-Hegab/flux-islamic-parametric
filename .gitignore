@@ -6,6 +6,8 @@ venv/
 .ruff_cache/
 output/
 eval_outputs/
+dataset_synthetic_backup/
+.opencode/
 *.safetensors
 .hf_token
 .env
