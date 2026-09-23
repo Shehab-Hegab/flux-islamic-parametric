@@ -10,6 +10,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 from islamic_parametric.constants import (  # noqa: E402
     BASE_MODEL,
+    CHECKPOINTING_STEPS,
+    CHECKPOINTS_TOTAL_LIMIT,
     DATASET_DIR,
     INSTANCE_PROMPT,
     LEARNING_RATE,
@@ -50,6 +52,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output-dir", default=OUTPUT_DIR)
     p.add_argument("--dry-run", action="store_true", help="print resolved training command and exit")
     p.add_argument("--fetch-script", action="store_true", help="download official diffusers train script then exit")
+    p.add_argument(
+        "--resume",
+        action="store_true",
+        help="resume from latest checkpoint-* under --output-dir (pass --resume_from_checkpoint=latest)",
+    )
     return p
 
 
@@ -90,6 +97,10 @@ def build_launch_command(instance_dir: str, output_dir: str) -> list[str]:
         "--mixed_precision",
         MIXED_PRECISION,
         "--gradient_checkpointing",
+        "--checkpointing_steps",
+        str(CHECKPOINTING_STEPS),
+        "--checkpoints_total_limit",
+        str(CHECKPOINTS_TOTAL_LIMIT),
         "--seed",
         "42",
         "--report_to",
@@ -137,6 +148,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     cmd = build_launch_command(args.instance_dir, args.output_dir)
+    if args.resume:
+        cmd.extend(["--resume_from_checkpoint", "latest"])
     print("Launching:", " ".join(cmd))
     env = os.environ.copy()
     import subprocess

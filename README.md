@@ -25,6 +25,8 @@ Example:
 | `training/train_dreambooth_lora_flux.py` | Official diffusers training script (vendored) |
 | `Flux_Architectural_LoRA_Training.ipynb` | Google Colab notebook (T4/A100) |
 | `inference_eval.py` | Side-by-side base vs LoRA grids (seed 42, 1024²) |
+| `evaluate_structure.py` | Quantitative geometry metrics (symmetry, edges, Hough, periodicity) |
+| `expand_dataset.py` | License-aware dataset expansion (Wikimedia/CC0 metadata fields) |
 | `upload_to_hf.py` | Dry-run / `--execute` upload of dataset + LoRA |
 | `src/islamic_parametric/constants.py` | Single source of truth: trigger, hyperparams, repo IDs |
 
@@ -52,9 +54,11 @@ python generate_captions.py --backend auto
 python train_flux_lora.py --dry-run
 jupyter nbconvert --to notebook --execute Flux_Architectural_LoRA_Training.ipynb  # or open in Colab
 
-# 4) Evaluation grid
+# 4) Evaluation grid + structural metrics
 python inference_eval.py --check
 python inference_eval.py --lora-path output
+python evaluate_structure.py --check
+python evaluate_structure.py --images dataset_islamic_parametric --limit 5
 
 # 5) Upload (dry-run first; --execute requires HF_TOKEN)
 python upload_to_hf.py --dry-run
@@ -79,10 +83,21 @@ python upload_to_hf.py --execute
 ## Architectural design intent
 
 Trained on modern Islamic parametric facades — geometric lattice screens, mashrabiya
-patterns, girih and punched parametric envelopes — so generations preserve modular rhythm,
-bilateral symmetry, and lattice topology with **zero visual hallucination** and precise
-geometric structural integrity. Evaluation grids lock seed 42 and compare base FLUX.1-dev
-against the adapter column-by-column.
+patterns, girih and punched parametric envelopes — so generations aim to preserve modular
+rhythm, bilateral symmetry, and lattice topology. **Geometry is evaluated, not guaranteed:**
+use `evaluate_structure.py` (bilateral symmetry error, edge density, Hough lines, periodicity)
+plus side-by-side grids at seed 42. Text-to-image models cannot promise zero hallucination;
+we measure structural properties instead.
+
+## License notes (non-commercial)
+
+- **This project is a non-commercial research/portfolio demo only.**
+- `black-forest-labs/FLUX.1-dev` and **derivative fine-tunes (including this LoRA)** are under
+  the FLUX.1-dev non-commercial license — commercial deployment/API/SaaS requires a separate
+  BFL license. See https://huggingface.co/black-forest-labs/FLUX.1-dev
+- Do not present this adapter as commercially deployable.
+- Unsplash images follow the Unsplash API license; synthetic images are generated in-repo;
+  extend `manifest.json` with author/license/URL for any third-party photos.
 
 ## Dataset + caption contract
 
@@ -105,7 +120,9 @@ ruff check src tests *.py
 python -m pytest -q
 ```
 
-## License notes
+## License notes (non-commercial)
 
-- FLUX.1-dev weights are subject to the FLUX.1-dev community license (accept on Hugging Face).
-- Unsplash images follow the Unsplash API license; synthetic images are generated in-repo.
+- **Non-commercial research / portfolio demo only.** FLUX.1-dev and derivatives (this LoRA)
+  are under the FLUX.1-dev non-commercial license — commercial use needs a separate BFL license.
+- Unsplash images follow the Unsplash API license; synthetic images are generated in-repo;
+  third-party photos must record author/license/URL in `manifest.json`.

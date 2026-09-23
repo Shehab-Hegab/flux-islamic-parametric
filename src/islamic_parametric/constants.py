@@ -25,6 +25,8 @@ INSTANCE_PROMPT = f"a detailed architectural photo {TRIGGER_WORD}"
 OUTPUT_DIR = "output"
 WEIGHTS_FILENAME = "pytorch_lora_weights.safetensors"
 TRAIN_SCRIPT = "training/train_dreambooth_lora_flux.py"
+CHECKPOINTING_STEPS = 250
+CHECKPOINTS_TOTAL_LIMIT = 4
 
 DATASET_REPO_ID = "Shehab-Hegab/islamic-parametric-architecture-dataset"
 LORA_REPO_ID = "Shehab-Hegab/flux-islamic-parametric-lora"
@@ -37,6 +39,7 @@ CAPTION_SUFFIX = (
 
 EVAL_SEED = 42
 EVAL_OUTPUT_DIR = "eval_outputs"
+STRUCTURAL_METRICS_PATH = f"{EVAL_OUTPUT_DIR}/structural_metrics.json"
 EVAL_PROMPTS = [
     (
         "A modern cultural center facade in Islamic_Parametric style, "
@@ -49,7 +52,7 @@ EVAL_PROMPTS = [
     ),
     (
         "A parametric geometric lattice facade of a museum in Islamic_Parametric style, "
-        "perforated aluminum panels, sharp lines, zero visual distortion, 8k render"
+        "perforated aluminum panels, sharp lines, precise geometry, 8k render"
     ),
     (
         "An interior courtyard in Islamic_Parametric style, arched mashrabiya walls, "
@@ -104,6 +107,8 @@ def train_dry_run_command(instance_dir: str, output_dir: str) -> str:
         f"--network_alpha={LORA_ALPHA} "
         f"--mixed_precision={MIXED_PRECISION} "
         f"--gradient_checkpointing "
+        f"--checkpointing_steps={CHECKPOINTING_STEPS} "
+        f"--checkpoints_total_limit={CHECKPOINTS_TOTAL_LIMIT} "
         f"--seed=42 "
         f"--report_to=tensorboard"
     )

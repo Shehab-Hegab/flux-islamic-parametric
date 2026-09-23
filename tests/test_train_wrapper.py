@@ -21,8 +21,17 @@ def test_dry_run_exit_zero(capsys):
         "--max_train_steps=800",
         "adamw8bit",
         "Islamic_Parametric style",
+        "--checkpointing_steps=250",
+        "--checkpoints_total_limit=4",
     ]:
         assert token in out, token
+
+
+def test_build_launch_command_includes_checkpointing():
+    cmd = build_launch_command("dataset_islamic_parametric", "output")
+    joined = " ".join(cmd)
+    assert "--checkpointing_steps 250" in joined
+    assert "--checkpoints_total_limit 4" in joined
 
 
 def test_build_launch_command_shape(tmp_path):

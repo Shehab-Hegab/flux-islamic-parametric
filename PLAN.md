@@ -39,6 +39,18 @@
 
 ### Phase 5 — Evaluation (DONE)
 - [x] `inference_eval.py` base vs LoRA side-by-side grids, seed 42, `--check` verified
+- [x] **NEW (expert report):** `evaluate_structure.py` — bilateral symmetry, edge density, Hough/axis line ratio, periodicity → `eval_outputs/structural_metrics.json` (`--check`, `--limit`, optional `--clip`)
+- [x] **NEW:** `expand_dataset.py` — license-tracked Wikimedia Commons expansion (author/license/source_url into `manifest.json`)
+
+### Phase 4b — Checkpoint/resume (DONE — expert report)
+- [x] `--checkpointing_steps=250 --checkpoints_total_limit=4` in dry-run + launch command (state dirs `checkpoint-250/500/750/800`)
+- [x] `train_flux_lora.py --resume` → `--resume_from_checkpoint latest`
+- [x] Colab notebook resume cell + checkpoint table row
+
+### Phase 4c — License + claim language (DONE — expert report)
+- [x] README: **non-commercial** FLUX.1-dev notice; "zero hallucination" → measurable structural evaluation
+- [x] `MODEL_CARD.md` + `upload_to_hf.py` `_model_card()` same reframe + license line
+- [x] Caption suffix `no visual distortion` kept (training prompt contract + tests); one eval prompt changed to `precise geometry`
 
 ### Phase 6 — HF upload + docs (DONE)
 - [x] `upload_to_hf.py` dry-run verified (both repos + URLs)
@@ -89,12 +101,18 @@ python upload_to_hf.py --execute
 | train_flux_lora.py + vendored diffusers script | DONE |
 | Colab notebook | DONE |
 | inference_eval.py | DONE |
+| evaluate_structure.py (geometry metrics) | DONE |
+| expand_dataset.py (license-aware) | DONE |
+| checkpoint/resume (250-step) | DONE |
+| Non-commercial license + claim language | DONE |
 | upload_to_hf.py + model card + HF URLs docs | DONE |
-| Tests + lint | GREEN (18 passed) |
+| Tests + lint | GREEN (28 passed, ruff clean) |
 | GitHub push to Shehab-Hegab | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric |
 | Multi-model orchestrate review | DONE (fixes applied) |
 | **HF dataset LIVE** | DONE → https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset |
 | **HF LoRA model card LIVE** | DONE → https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora |
 | LoRA weights upload | PENDING Colab training |
+| Dataset expand 50–75 real+synthetic | SCAFFOLD ready (`expand_dataset.py`) — run after baseline |
+| Expert-report roadmap items | Partly DONE this session (license, metrics, checkpoints); baseline training still next |
 
-**Last updated after:** HF dataset + LoRA card upload (session 2026-09-23). Token only in gitignored `.env`.
+**Last updated after:** Expert-report batch — non-commercial license + claim language, `evaluate_structure.py`, `expand_dataset.py`, checkpoint/resume 250 steps, Colab resume cell (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.

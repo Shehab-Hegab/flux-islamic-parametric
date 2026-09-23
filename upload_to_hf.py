@@ -44,8 +44,10 @@ dataset:
 # FLUX.1-dev LoRA — Islamic Parametric Architecture
 
 Adapter for **Islamic Parametric Architecture & Facades**: geometric lattice screens,
-mashrabiya parametric patterns, and structurally symmetric modern envelopes with
-zero visual hallucination intent (precise geometric structural integrity).
+mashrabiya parametric patterns, and structurally symmetric modern envelopes. Geometry is
+evaluated with measurable metrics (symmetry, edges, periodicity) — not a hallucination guarantee.
+
+**License:** non-commercial research/demo only (FLUX.1-dev + derivatives non-commercial).
 
 ## Trigger words
 
@@ -97,8 +99,9 @@ to verify geometric structural logic.
 
 ## Evaluation
 
-See `inference_eval.py` in the source repository: side-by-side grids, prompts locked to the
-trigger word, seed {EVAL_SEED}.
+See `inference_eval.py` (base vs LoRA grids, seed {EVAL_SEED}) and `evaluate_structure.py`
+(bilateral symmetry error, edge density, Hough-line consistency, periodicity) in the source
+repository. Prompts are locked to the trigger word.
 """
 
 
