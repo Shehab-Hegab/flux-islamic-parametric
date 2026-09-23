@@ -79,7 +79,7 @@ import torch
 from diffusers import FluxPipeline
 
 pipe = FluxPipeline.from_pretrained("black-forest-labs/FLUX.1-dev", torch_dtype=torch.bfloat16)
-    pipe.load_lora_weights("Shehab-Hegab/flux-islamic-parametric-lora", weight_name="{WEIGHTS_FILENAME}")
+pipe.load_lora_weights("Shehab-Hegab/flux-islamic-parametric-lora", weight_name="{WEIGHTS_FILENAME}")
 pipe.enable_model_cpu_offload()
 image = pipe(
     "A contemporary mosque exterior in Islamic_Parametric style, mashrabiya lattice screen, golden hour, photorealistic 8k",
@@ -118,7 +118,7 @@ def plan_uploads(dataset_dir: Path, weights: Path) -> list[dict]:
     ]
 
 
-def run_upload(plan: list[dict]) -> None:
+def run_upload(plan: list[dict], *, card_only: bool = False) -> None:
     from huggingface_hub import HfApi
 
     token = os.environ.get("HF_TOKEN", "").strip()
@@ -127,24 +127,34 @@ def run_upload(plan: list[dict]) -> None:
     api = HfApi(token=token)
     for item in plan:
         if item["type"] == "dataset":
-            api.create_repo(item["repo_id"], repo_type="dataset", exist_ok=True)
+            api.create_repo(item["repo_id"], repo_type="dataset", exist_ok=True, private=False)
             api.upload_folder(
                 folder_path=item["folder"],
                 repo_id=item["repo_id"],
                 repo_type="dataset",
-                ignore_patterns=[".git*", "__pycache__"],
+                ignore_patterns=[".git*", "__pycache__", ".env*"],
             )
             print(f"uploaded dataset -> {item['repo_id']}")
         else:
-            api.create_repo(item["repo_id"], exist_ok=True)
+            api.create_repo(item["repo_id"], exist_ok=True, private=False)
             card = _model_card()
-            api.upload_file(path_or_fileobj=item["files"][0], path_in_repo=WEIGHTS_FILENAME, repo_id=item["repo_id"])
             api.upload_file(
                 path_or_fileobj=card.encode("utf-8"),
                 path_in_repo="README.md",
                 repo_id=item["repo_id"],
             )
-            print(f"uploaded LoRA -> {item['repo_id']}")
+            weights_path = Path(item["files"][0])
+            if card_only:
+                print(f"created LoRA repo + model card -> {item['repo_id']} (weights pending training)")
+            elif weights_path.exists():
+                api.upload_file(
+                    path_or_fileobj=str(weights_path),
+                    path_in_repo=WEIGHTS_FILENAME,
+                    repo_id=item["repo_id"],
+                )
+                print(f"uploaded LoRA -> {item['repo_id']}")
+            else:
+                print(f"[warn] weights missing ({weights_path}); uploaded model card only")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -154,7 +164,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--dataset-only",
         action="store_true",
-        help="upload dataset only (skip LoRA weights; use before training completes)",
+        help="upload dataset only (skip LoRA; use before training completes)",
+    )
+    parser.add_argument(
+        "--card-only",
+        action="store_true",
+        help="create LoRA repo with README model card only (weights after Colab training)",
     )
     parser.add_argument("--dataset-dir", default=DATASET_DIR)
     parser.add_argument("--weights", default=str(Path(OUTPUT_DIR) / WEIGHTS_FILENAME))
@@ -164,6 +179,8 @@ def main(argv: list[str] | None = None) -> int:
     plan = plan_uploads(Path(args.dataset_dir), weights)
     if args.dataset_only:
         plan = [item for item in plan if item["type"] == "dataset"]
+    elif args.card_only:
+        plan = plan  # both, but LoRA skips missing weights
     if not args.execute:
         print("DRY RUN — no files will be uploaded")
         for item in plan:
@@ -179,19 +196,19 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  lora:    https://huggingface.co/{LORA_REPO_ID}")
         return 0
 
-    if not args.dataset_only:
+    if not args.dataset_only and not args.card_only:
         if not weights.exists():
             print(
                 f"[error] weights not found: {weights} — train first or pass --weights "
-                f"(or use --dataset-only)",
+                f"(or use --dataset-only / --card-only)",
                 file=sys.stderr,
             )
             return 1
-    elif not Path(args.dataset_dir).is_dir():
+    if args.dataset_only and not Path(args.dataset_dir).is_dir():
         print(f"[error] dataset dir missing: {args.dataset_dir}", file=sys.stderr)
         return 1
     try:
-        run_upload(plan)
+        run_upload(plan, card_only=args.card_only and not weights.exists())
     except SystemExit:
         raise
     except Exception as exc:

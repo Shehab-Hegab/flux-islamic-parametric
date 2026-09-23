@@ -1,49 +1,47 @@
 # Project links (verified 2026-09-23)
 
-## Live dataset (GitHub — actually contains the 25 images + captions)
+## Hugging Face dataset — LIVE (uploaded)
 
-Data worked on in this repo lives under `dataset_islamic_parametric/` and is pushed to GitHub.
-
-- Dataset folder (images + captions + manifest):
-  `https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric`
-- Manifest:
-  `https://github.com/Shehab-Hegab/flux-islamic-parametric/blob/main/dataset_islamic_parametric/manifest.json`
-- First image:
-  `https://github.com/Shehab-Hegab/flux-islamic-parametric/blob/main/dataset_islamic_parametric/image_01.jpg`
-- First caption:
-  `https://github.com/Shehab-Hegab/flux-islamic-parametric/blob/main/dataset_islamic_parametric/captions/image_01.txt`
-- All captions (folder):
-  `https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric/captions`
-- Full project repo:
-  `https://github.com/Shehab-Hegab/flux-islamic-parametric`
-
-## Hugging Face targets (NOT live yet — upload pending)
-
-These return 401/404 until `HF_TOKEN` is set and `python upload_to_hf.py --execute` runs
-(dataset + LoRA after Colab training). Do **not** paste them as working links until then.
-
-- Dataset (planned):
+- Landing page:
   `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
-- LoRA (planned):
+- Manifest:
+  `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset/blob/main/manifest.json`
+- First image:
+  `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset/blob/main/image_01.jpg`
+- First caption:
+  `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset/blob/main/captions/image_01.txt`
+- Tree (all files):
+  `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset/tree/main`
+
+## Hugging Face LoRA — model card live; weights after Colab training
+
+- Landing page:
   `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
-- Weights resolve (planned):
+- Weights (after training upload):
+  `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora/blob/main/pytorch_lora_weights.safetensors`
+- Resolve URL:
   `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora/resolve/main/pytorch_lora_weights.safetensors`
+
+## GitHub mirror (same dataset files)
+
+- Dataset folder:
+  `https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric`
+- Full project:
+  `https://github.com/Shehab-Hegab/flux-islamic-parametric`
 
 ## Base model (upstream)
 
 - `https://huggingface.co/black-forest-labs/FLUX.1-dev`
 
-## Email snippet (share working links)
+## Email snippet
 
-Subject: FLUX.1 LoRA — Islamic Parametric Architecture (dataset + training pipeline)
+Subject: FLUX.1 LoRA — Islamic Parametric Architecture (dataset + weights + eval)
 
-Body:
-
-1. Dataset (25×≥1024², Florence-2 captions, manifest) — GitHub:
-   https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric
-2. Full pipeline repo (training, eval, upload scripts, Colab):
-   https://github.com/Shehab-Hegab/flux-islamic-parametric
-3. Hugging Face LoRA (after training upload):
+1. Dataset (25×≥1024², captions, manifest):
+   https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset
+2. LoRA + model card:
    https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora
+3. Weights direct:
+   https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora/blob/main/pytorch_lora_weights.safetensors
 
 Trigger word: `in Islamic_Parametric style`

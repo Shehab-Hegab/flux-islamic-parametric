@@ -5,10 +5,10 @@
 **Goal:** Production-grade HF repo: 25-image Islamic Parametric dataset + captions + FLUX.1-dev LoRA training pipeline + eval grids + HF upload scripts, portfolio-ready for Dr. Mai Soliman review.
 
 **Target repos**
-- Dataset (LIVE on GitHub — real data): `https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric`
-- Project: `https://github.com/Shehab-Hegab/flux-islamic-parametric`
-- HF dataset (PENDING upload): `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
-- HF LoRA (PENDING upload): `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
+- HF dataset (LIVE): `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
+- HF LoRA card (LIVE; weights pending Colab): `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
+- Project (GitHub): `https://github.com/Shehab-Hegab/flux-islamic-parametric`
+- Dataset mirror (GitHub): `https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric`
 
 **Locked hyperparameters:** base `black-forest-labs/FLUX.1-dev`, r=16, α=16, lr=1e-4, res=1024, steps=800, optimizer=adamw8bit, bf16, trigger `in Islamic_Parametric style`.
 
@@ -40,10 +40,12 @@
 ### Phase 5 — Evaluation (DONE)
 - [x] `inference_eval.py` base vs LoRA side-by-side grids, seed 42, `--check` verified
 
-### Phase 6 — HF upload + docs (DONE — execution pending tokens)
+### Phase 6 — HF upload + docs (DONE)
 - [x] `upload_to_hf.py` dry-run verified (both repos + URLs)
 - [x] `MODEL_CARD.md`, `README.md`, `docs/HF_URLS.md`
-- [ ] `--execute` after Colab training produces `pytorch_lora_weights.safetensors` + `HF_TOKEN` set
+- [x] **Dataset LIVE on HF** (25 jpg + 25 captions + manifest = 52 files): `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
+- [x] **LoRA repo + model card LIVE**: `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
+- [ ] Upload `pytorch_lora_weights.safetensors` after Colab training (`python upload_to_hf.py --execute` with weights present)
 
 ### Phase 7 — Quality gates (DONE)
 - [x] ruff clean, pytest 18 passed
@@ -51,10 +53,12 @@
 - [x] Multi-model orchestrate review (6/29 models scored; top gpt-oss-120b 86/100) — applied real fixes: clear gated-model errors in `inference_eval.py`, instance-dir/image validation + launch error handling in `train_flux_lora.py`, HF upload exception wrapping; rejected hallucinated findings (no hardcoded tokens/paths in repo)
 - [x] Final CLI verification: ruff, pytest, inference --check, train --dry-run, upload --dry-run all green
 
-### Phase 8 — Delivery (DONE — except live HF execute)
+### Phase 8 — Delivery (DONE except LoRA weights upload)
 - [x] GitHub repo created + pushed: `https://github.com/Shehab-Hegab/flux-islamic-parametric`
 - [x] PLAN.md living file at repo root (this file)
-- [ ] `upload_to_hf.py --execute` after Colab training + `HF_TOKEN` (user/Colab step)
+- [x] HF dataset + LoRA model card uploaded with account `Shehab-Hegab`
+- [x] Token stored only in gitignored `.env` / `.hf_token` — never committed
+- [ ] Weights upload after Colab training (user step)
 
 ---
 
@@ -85,10 +89,12 @@ python upload_to_hf.py --execute
 | train_flux_lora.py + vendored diffusers script | DONE |
 | Colab notebook | DONE |
 | inference_eval.py | DONE |
-| upload_to_hf.py + model card + HF URLs docs | DONE (execute after training) |
+| upload_to_hf.py + model card + HF URLs docs | DONE |
 | Tests + lint | GREEN (18 passed) |
 | GitHub push to Shehab-Hegab | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric |
 | Multi-model orchestrate review | DONE (fixes applied) |
-| Live HF upload (needs HF_TOKEN + trained weights) | PENDING USER/COLAB |
+| **HF dataset LIVE** | DONE → https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset |
+| **HF LoRA model card LIVE** | DONE → https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora |
+| LoRA weights upload | PENDING Colab training |
 
-**Last updated after:** Florence captions + orchestrate review + GitHub push (session 2026-09-23).
+**Last updated after:** HF dataset + LoRA card upload (session 2026-09-23). Token only in gitignored `.env`.
