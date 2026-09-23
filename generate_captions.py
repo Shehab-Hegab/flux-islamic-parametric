@@ -66,18 +66,63 @@ def template_caption(image_name: str, manifest_entry: dict, index: int) -> str:
     return build_caption(f"{core}; {unique}")
 
 
+_FLORENCE_STATE: dict = {}
+
+
+def _florence_load(model_id: str, device: str, dtype):
+    from transformers import AutoModelForCausalLM, AutoProcessor
+    from transformers.dynamic_module_utils import get_class_from_dynamic_module
+
+    if "model" not in _FLORENCE_STATE:
+        cls = get_class_from_dynamic_module(
+            "modeling_florence2.Florence2ForConditionalGeneration", model_id
+        )
+        for klass in cls.__mro__:
+            attr = klass.__dict__.get("_supports_sdpa")
+            if isinstance(attr, property):
+
+                def _safe_sdpa(self):
+                    lm = self.__dict__.get("language_model")
+                    if lm is None:
+                        return False
+                    return bool(getattr(lm, "_supports_sdpa", False))
+
+                klass._supports_sdpa = property(_safe_sdpa)
+                break
+        processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_id, dtype=dtype, trust_remote_code=True
+        )
+        if getattr(model.config, "decoder_start_token_id", None) is None:
+            tok = getattr(processor, "tokenizer", None)
+            model.config.decoder_start_token_id = getattr(tok, "bos_token_id", None) or getattr(
+                tok, "pad_token_id", None
+            )
+        if getattr(model.generation_config, "decoder_start_token_id", None) is None:
+            model.generation_config.decoder_start_token_id = model.config.decoder_start_token_id
+        model.to(device)
+        model.eval()
+        _FLORENCE_STATE["processor"] = processor
+        _FLORENCE_STATE["model"] = model
+    return _FLORENCE_STATE["processor"], _FLORENCE_STATE["model"]
+
+
 def florence_caption(pil_image) -> str:
     import torch
-    from transformers import AutoModelForCausalLM, AutoProcessor
 
     model_id = "microsoft/Florence-2-large"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = torch.float16 if device == "cuda" else torch.float32
-    processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype, trust_remote_code=True).to(device)
+    processor, model = _florence_load(model_id, device, dtype)
     inputs = processor(text="<CAPTION>", images=pil_image, return_tensors="pt").to(device, dtype)
     with torch.no_grad():
-        generated = model.generate(**inputs, max_new_tokens=80)
+        generated = model.generate(
+            **inputs,
+            max_new_tokens=80,
+            num_beams=1,
+            do_sample=False,
+            use_cache=False,
+        )
     raw = processor.batch_decode(generated, skip_special_tokens=True)[0]
     raw = raw.replace("<CAPTION>", "").strip()
     return build_caption(raw if raw else "a modern architectural facade with geometric lattice detailing")
