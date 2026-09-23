@@ -106,4 +106,4 @@ Filters: free license, min side 1024, dedup, brightness, blacklist titles (cathe
 5. Prefer most beautiful, brightest, most unified frames — aesthetic score matters.
 6. Full autonomy: choose the highest-quality option; do not stop for trivia.
 
-**Status:** Phases 0–4 DONE — gold PASS (25 images, free licenses, mean_luma 122.1, facade 12 / detail 7 / interior 6). Phase 5 (GitHub + HF gold replace) executing now; Phase 6 Colab handoff next.
+**Status:** Phases 0–5 DONE — gold PASS (25 free-license images, mean_luma 122.1, facade 12 / detail 7 / interior 6). GitHub `19534a1` pushed; HF dataset gold replace verified (25+25+manifest). Next: Phase 6 Colab handoff (user Run all on T4 with `HF_TOKEN` secret).

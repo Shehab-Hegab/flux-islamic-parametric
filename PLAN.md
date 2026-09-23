@@ -58,7 +58,7 @@
 ### Phase 6 — HF upload + docs (DONE)
 - [x] `upload_to_hf.py` dry-run verified (both repos + URLs)
 - [x] `MODEL_CARD.md`, `README.md`, `docs/HF_URLS.md`
-- [x] **Dataset LIVE on HF** (25 jpg + 25 captions + manifest): `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
+- [x] **Dataset LIVE on HF (gold set, replaced stale remote):** `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
 - [x] `upload_to_hf.py` now **purges stale remote files** before upload (`--dataset-only --execute` = full replace with new free-license set)
 - [x] **LoRA repo + model card LIVE**: `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
 - [ ] Upload `pytorch_lora_weights.safetensors` after Colab training (`python upload_to_hf.py --execute` with weights present)
@@ -115,7 +115,7 @@ python upload_to_hf.py --execute
 | Tests + lint | GREEN (37 passed, ruff clean) |
 | GitHub push PUBLIC | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric (visibility PUBLIC) |
 | Multi-model orchestrate review | DONE (fixes applied) |
-| **HF dataset LIVE (gold replace)** | PENDING this session → `upload_to_hf.py --dataset-only --execute` |
+| **HF dataset LIVE (gold replace)** | DONE → https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset (25 gold images + captions + manifest) |
 | **HF LoRA model card LIVE** | DONE → https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora |
 | LoRA weights upload | PENDING Colab training |
 | Dataset expand 50–75 real+synthetic | SCAFFOLD ready (`expand_dataset.py`) — run after baseline |
