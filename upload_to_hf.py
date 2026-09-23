@@ -132,7 +132,7 @@ def _replace_dataset_folder(api, item: dict) -> None:
     remote = list(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
     stale = [f for f in remote if f not in keep]
     if stale:
-        api.delete_files(repo_id=repo_id, repo_type="dataset", path_or_fileobj=stale)
+        api.delete_files(repo_id=repo_id, repo_type="dataset", delete_patterns=stale)
         print(f"removed {len(stale)} stale remote file(s) from {repo_id}")
 
     api.upload_folder(
