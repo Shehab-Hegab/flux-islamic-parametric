@@ -19,16 +19,13 @@ Example:
 | Path | Purpose |
 |---|---|
 | `dataset_islamic_parametric/` | 25 gold style-unified free-license photos ≥1024×1024 + `captions/*.txt` + `manifest.json` |
-| `gold_dataset.py` (+ `gold_fill`/`gold_repair`/…) | Gold rebuild: Openverse top-up, license filter, category balance, PASS report |
+| `gold_dataset.py` + `gold_fill.py` + `gold_repair.py` | Gold rebuild: Openverse top-up, license filter, category balance, PASS report |
 | `finalize_dataset.py` | Dedup + renumber + caption + contact sheet + quality report (`--check`/`--execute`) |
-| `download_or_synthetic_dataset.py` | Legacy hybrid builder (Unsplash → synthetic fallback) |
-| `generate_captions.py` | Florence-2-large captions with deterministic template fallback |
 | `train_flux_lora.py` | FLUX DreamBooth LoRA wrapper (`--dry-run` / Colab GPU run) |
 | `training/train_dreambooth_lora_flux.py` | Official diffusers training script (vendored) |
 | `Flux_Architectural_LoRA_Training.ipynb` | Google Colab notebook (T4/A100) |
 | `inference_eval.py` | Side-by-side base vs LoRA grids (seed 42, 1024²) |
 | `evaluate_structure.py` | Quantitative geometry metrics (symmetry, edges, Hough, periodicity) |
-| `expand_dataset.py` | License-aware dataset expansion (Wikimedia/CC0 metadata fields) |
 | `upload_to_hf.py` | Dry-run / `--execute` upload of dataset + LoRA |
 | `src/islamic_parametric/constants.py` | Single source of truth: trigger, hyperparams, repo IDs |
 
@@ -49,20 +46,17 @@ pip install -r requirements.txt
 # 1) Dataset already in-repo: 25 unique bright free-license photos + captions + manifest
 python finalize_dataset.py --check
 
-# 2) Re-caption / regenerate quality report if needed (auto: Florence-2 if available, else template)
-python generate_captions.py --backend auto
-
-# 3) Training preview (local) / real run (Colab notebook)
+# 2) Training preview (local) / real run (Colab notebook)
 python train_flux_lora.py --dry-run
 # Open Flux_Architectural_LoRA_Training.ipynb in Google Colab (T4 GPU)
 
-# 4) Evaluation grid + structural metrics
+# 3) Evaluation grid + structural metrics
 python inference_eval.py --check
 python inference_eval.py --lora-path output
 python evaluate_structure.py --check
 python evaluate_structure.py --images dataset_islamic_parametric --limit 5
 
-# 5) Upload (dry-run first; --execute requires HF_TOKEN)
+# 4) Upload (dry-run first; --execute requires HF_TOKEN)
 python upload_to_hf.py --dry-run
 python upload_to_hf.py --dataset-only --execute   # replace remote dataset (purges stale files)
 python upload_to_hf.py --execute                 # after Colab training produces weights
@@ -105,7 +99,7 @@ we measure structural properties instead.
 
 ## Dataset + caption contract
 
-- 25 unique free-license photos (mean luma ≈ 113, no md5/phash duplicates) + quality report
+- 25 unique free-license photos (mean luma ≈ 124, no md5/phash duplicates) + quality report
 - 25 unique captions; every caption contains `in Islamic_Parametric style`
 - Caption skeleton: *A detailed architectural photo in Islamic_Parametric style, featuring …,
   precise geometric lattice patterns, daylighting, structural symmetry, photorealistic 8k
@@ -115,7 +109,6 @@ we measure structural properties instead.
 
 | Var | Used by | Notes |
 |---|---|---|
-| `UNSPLASH_ACCESS_KEY` | legacy dataset builder | optional; not required for the live free-license set |
 | `HF_TOKEN` | training (gated FLUX), upload | never commit tokens |
 
 ## Tests & lint

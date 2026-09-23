@@ -26,13 +26,12 @@
 - [x] **Gold contract locked:** `PLAN_DATASET_GOLD.md` (style-unified 40/30/30, no bleed, no junk captions)
 - [x] Gold purge + Openverse top-up (`gold_dataset.py` / `gold_fill.py` / `gold_repair.py`)
 - [x] Quality report PASS + gold contact sheet (`eval_outputs/dataset_quality_report.json`)
-- [x] Tests green after caption rewrite (ruff clean, pytest 37 passed)
+- [x] Tests green after caption rewrite (ruff clean, pytest green)
 
 ### Phase 3 — Captions (DONE)
-- [x] `generate_captions.py` with auto/florence/template backends (a7b1853)
-- [x] Florence-2-large fixed for transformers 4.57 (SDPA property patch + greedy `use_cache=False` + remote processor); einops/timm installed
+- [x] Gold category-based captions via `gold_dataset.write_gold_captions` (facade/detail/interior cores)
 - [x] 25 unique captions with trigger verified → ruff+pytest green
-- [x] Caption contract via `build_caption` + `no visual distortion` suffix kept
+- [x] Caption contract: trigger + `no visual distortion` suffix kept
 
 ### Phase 4 — Training (DONE)
 - [x] `train_flux_lora.py` wrapper (`--dry-run`, `--fetch-script`, CUDA gate)
@@ -43,7 +42,12 @@
 ### Phase 5 — Evaluation (DONE)
 - [x] `inference_eval.py` base vs LoRA side-by-side grids, seed 42, `--check` verified
 - [x] **NEW (expert report):** `evaluate_structure.py` — bilateral symmetry, edge density, Hough/axis line ratio, periodicity → `eval_outputs/structural_metrics.json` (`--check`, `--limit`, optional `--clip`)
-- [x] **NEW:** `expand_dataset.py` — license-tracked Wikimedia Commons expansion (author/license/source_url into `manifest.json`)
+
+### Cleanup — obsolete files removed (2026-09-23)
+- [x] Deleted legacy one-shot scripts + their tests: `download_or_synthetic_dataset.py`, `generate_captions.py`, `expand_dataset.py`, `curate_architecture.py`, `curate_wikimedia_landmarks.py`, `tools_analyze_dataset.py`, `gold_balance.py`, `gold_replace.py`, `gold_select.py`
+- [x] Removed tracked `.opencode/state/*`, synthetic backup, stray PNG, old eval contact sheets
+- [x] Kept gold core: `gold_dataset.py`, `gold_fill.py`, `gold_repair.py`, `finalize_dataset.py`
+- [x] HF dataset re-verified clean (25 gold images + 25 captions + manifest + contact sheet only)
 
 ### Phase 4b — Checkpoint/resume (DONE — expert report)
 - [x] `--checkpointing_steps=250 --checkpoints_total_limit=4` in dry-run + launch command (state dirs `checkpoint-250/500/750/800`)
@@ -64,8 +68,8 @@
 - [ ] Upload `pytorch_lora_weights.safetensors` after Colab training (`python upload_to_hf.py --execute` with weights present)
 
 ### Phase 7 — Quality gates (DONE)
-- [x] ruff clean, pytest 18 passed
-- [x] Florence-2 captions: 25 unique + trigger verified
+- [x] ruff clean, pytest green after gold caption rewrite
+- [x] 25 unique gold captions with trigger verified
 - [x] Multi-model orchestrate review (6/29 models scored; top gpt-oss-120b 86/100) — applied real fixes: clear gated-model errors in `inference_eval.py`, instance-dir/image validation + launch error handling in `train_flux_lora.py`, HF upload exception wrapping; rejected hallucinated findings (no hardcoded tokens/paths in repo)
 - [x] Final CLI verification: ruff, pytest, inference --check, train --dry-run, upload --dry-run all green
 
@@ -83,17 +87,9 @@
 ## How to finish remaining work
 
 ```bash
-pip install einops timm
-python generate_captions.py --backend auto      # Florence captions
 ruff check src tests *.py && python -m pytest -q
-git add -A && git commit -m "feat: florence captions"   # if regenerated
-
-# Expert review (orchestrate)
-& "C:\Users\Shehab\.opencode\orchestrate.ps1" -Task "Review this FLUX LoRA repo for quality issues" -Mode auto
-
-# GitHub push
-gh repo create flux-islamic-parametric --private --source . --push
-# or: git remote add origin https://github.com/Shehab-Hegab/flux-islamic-parametric.git && git push -u origin main
+python train_flux_lora.py --dry-run
+python upload_to_hf.py --dataset-only --dry-run
 
 # After Colab training + HF_TOKEN
 python upload_to_hf.py --execute
@@ -102,23 +98,20 @@ python upload_to_hf.py --execute
 ## Status summary
 | Deliverable | Status |
 |---|---|
-| Gold dataset 25 free-license photos + manifest | DONE (PASS: luma 122.1, free licenses, facade 12 / detail 7 / interior 6) |
+| Gold dataset 25 free-license photos + manifest | DONE (PASS: mean_luma 124.4, free licenses, facade 12 / detail 7 / interior 6) |
 | Captions (25 unique + trigger) | DONE |
 | train_flux_lora.py + vendored diffusers script | DONE |
 | Colab notebook | DONE |
 | inference_eval.py | DONE |
 | evaluate_structure.py (geometry metrics) | DONE |
-| expand_dataset.py (license-aware) | DONE |
 | checkpoint/resume (250-step) | DONE |
 | Non-commercial license + claim language | DONE |
 | upload_to_hf.py + model card + HF URLs docs | DONE |
-| Tests + lint | GREEN (37 passed, ruff clean) |
+| Tests + lint | GREEN (ruff clean + pytest green after cleanup) |
 | GitHub push PUBLIC | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric (visibility PUBLIC) |
-| Multi-model orchestrate review | DONE (fixes applied) |
+| Obsolete file cleanup (GitHub + local) | DONE (legacy scripts/tests/junk removed) |
 | **HF dataset LIVE (gold replace)** | DONE → https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset (25 gold images + captions + manifest) |
 | **HF LoRA model card LIVE** | DONE → https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora |
 | LoRA weights upload | PENDING Colab training |
-| Dataset expand 50–75 real+synthetic | SCAFFOLD ready (`expand_dataset.py`) — run after baseline |
-| Expert-report roadmap items | Partly DONE this session (license, metrics, checkpoints); baseline training still next |
 
-**Last updated after:** Colab `diffusers` git install fix for `check_min_version("0.41.0.dev0")` (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.
+**Last updated after:** obsolete-file cleanup + GitHub/HF re-sync (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.

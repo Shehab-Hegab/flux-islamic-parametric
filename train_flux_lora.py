@@ -138,7 +138,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     images = sorted(instance_path.glob("*.jpg")) + sorted(instance_path.glob("*.png"))
     if not images:
-        print(f"[error] no training images in {instance_path} — run download_or_synthetic_dataset.py first", file=sys.stderr)
+        print(f"[error] no training images in {instance_path} — gold dataset missing; restore dataset_islamic_parametric/", file=sys.stderr)
         return 1
 
     try:

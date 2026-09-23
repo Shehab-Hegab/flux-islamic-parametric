@@ -1,8 +1,8 @@
 # FLUX.1-dev LoRA — Islamic Parametric Architecture
 
 Adapter for **Islamic Parametric Architecture & Facades**: geometric lattice screens,
-mashrabiya parametric patterns, and structurally symmetric modern envelopes. Structural
-properties are **measured** (symmetry / edges / periodicity harness), not guaranteed.
+mashrabiya parametric patterns, and structurally symmetric modern envelopes. Geometry is
+evaluated with measurable metrics (symmetry, edges, periodicity) — not a hallucination guarantee.
 
 **License:** non-commercial research/demo only — FLUX.1-dev and derivatives are under the
 FLUX.1-dev non-commercial license.
