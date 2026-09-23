@@ -18,7 +18,8 @@ Example:
 
 | Path | Purpose |
 |---|---|
-| `dataset_islamic_parametric/` | 25 curated free-license photos ≥1024×1024 + `captions/*.txt` + `manifest.json` |
+| `dataset_islamic_parametric/` | 25 gold style-unified free-license photos ≥1024×1024 + `captions/*.txt` + `manifest.json` |
+| `gold_dataset.py` (+ `gold_fill`/`gold_repair`/…) | Gold rebuild: Openverse top-up, license filter, category balance, PASS report |
 | `finalize_dataset.py` | Dedup + renumber + caption + contact sheet + quality report (`--check`/`--execute`) |
 | `download_or_synthetic_dataset.py` | Legacy hybrid builder (Unsplash → synthetic fallback) |
 | `generate_captions.py` | Florence-2-large captions with deterministic template fallback |
@@ -33,7 +34,7 @@ Example:
 
 ## Where the data lives (verified live links)
 
-- **Hugging Face dataset (LIVE — 25 images + captions + manifest):**
+- **Hugging Face dataset (LIVE — gold style-unified set, 25 images + captions + manifest):**
   [`Shehab-Hegab/islamic-parametric-architecture-dataset`](https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset)
 - **GitHub project:** [`Shehab-Hegab/flux-islamic-parametric`](https://github.com/Shehab-Hegab/flux-islamic-parametric)
 - **Hugging Face LoRA** (model card live; weights after Colab training):

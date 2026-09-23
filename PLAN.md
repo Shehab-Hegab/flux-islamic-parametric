@@ -21,13 +21,12 @@
 - [x] Implementation plan `docs/superpowers/plans/2026-09-23-flux-islamic-parametric-pipeline.md`
 - [x] pyproject (ruff), .gitignore, requirements.txt, `src/islamic_parametric/{__init__,constants}.py` (73d3852)
 
-### Phase 2 — Dataset (REPLACED — free-license real photos)
-- [x] Legacy `download_or_synthetic_dataset.py` hybrid Unsplash→synthetic (superseded)
-- [x] Synthetic set rejected (dark/flat/duplicated) → replaced
-- [x] **Live set:** 25 unique bright free-license photos (`finalize_dataset.py`), mean luma 112.9, 0 md5/phash dups, `manifest.json` attribution
-- [x] Quality report PASS (`eval_outputs/dataset_quality_report.json`)
-- [x] Official review sheet `dataset_islamic_parametric/_contact_sheet_review.jpg` (stale `_contact_sheet_25` / `_contact_sheet_curation` deleted)
-- [x] Tests green (36)
+### Phase 2 — Dataset (GOLD rebuild — see PLAN_DATASET_GOLD.md)
+- [x] Legacy synthetic rejected; free-license historic set superseded
+- [x] **Gold contract locked:** `PLAN_DATASET_GOLD.md` (style-unified 40/30/30, no bleed, no junk captions)
+- [x] Gold purge + Openverse top-up (`gold_dataset.py` / `gold_fill.py` / `gold_repair.py`)
+- [x] Quality report PASS + gold contact sheet (`eval_outputs/dataset_quality_report.json`)
+- [x] Tests green after caption rewrite (ruff clean, pytest 37 passed)
 
 ### Phase 3 — Captions (DONE)
 - [x] `generate_captions.py` with auto/florence/template backends (a7b1853)
@@ -103,7 +102,7 @@ python upload_to_hf.py --execute
 ## Status summary
 | Deliverable | Status |
 |---|---|
-| Dataset 25 free-license photos + manifest | DONE (quality PASS) |
+| Gold dataset 25 free-license photos + manifest | DONE (PASS: luma 122.1, free licenses, facade 12 / detail 7 / interior 6) |
 | Captions (25 unique + trigger) | DONE |
 | train_flux_lora.py + vendored diffusers script | DONE |
 | Colab notebook | DONE |
@@ -113,10 +112,10 @@ python upload_to_hf.py --execute
 | checkpoint/resume (250-step) | DONE |
 | Non-commercial license + claim language | DONE |
 | upload_to_hf.py + model card + HF URLs docs | DONE |
-| Tests + lint | GREEN (28 passed, ruff clean) |
+| Tests + lint | GREEN (37 passed, ruff clean) |
 | GitHub push PUBLIC | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric (visibility PUBLIC) |
 | Multi-model orchestrate review | DONE (fixes applied) |
-| **HF dataset LIVE** | DONE → https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset |
+| **HF dataset LIVE (gold replace)** | PENDING this session → `upload_to_hf.py --dataset-only --execute` |
 | **HF LoRA model card LIVE** | DONE → https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora |
 | LoRA weights upload | PENDING Colab training |
 | Dataset expand 50–75 real+synthetic | SCAFFOLD ready (`expand_dataset.py`) — run after baseline |

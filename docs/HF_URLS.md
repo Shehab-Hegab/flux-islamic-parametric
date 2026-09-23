@@ -1,6 +1,6 @@
-# Project links (verified 2026-09-23; dataset = 25 free-license photos)
+# Project links (verified 2026-09-23; dataset = 25 gold free-license photos)
 
-## Hugging Face dataset — LIVE (replaced with free-license set)
+## Hugging Face dataset — LIVE (gold style-unified set)
 
 - Landing page:
   `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
@@ -37,7 +37,7 @@
 
 Subject: FLUX.1 LoRA — Islamic Parametric Architecture (dataset + weights + eval)
 
-1. Dataset (25 free-license ×≥1024², captions, manifest):
+1. Dataset (25 gold free-license ×≥1024², captions, manifest):
    https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset
 2. LoRA + model card:
    https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora
