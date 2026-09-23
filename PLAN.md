@@ -71,7 +71,8 @@
 - [x] Final CLI verification: ruff, pytest, inference --check, train --dry-run, upload --dry-run all green
 
 ### Phase 8 — Delivery (DONE except LoRA weights upload)
-- [x] GitHub repo created + pushed: `https://github.com/Shehab-Hegab/flux-islamic-parametric`
+- [x] GitHub repo created + pushed + made **PUBLIC** (Colab clone failed while private): `https://github.com/Shehab-Hegab/flux-islamic-parametric`
+- [x] Colab notebook: clone + flatten to cwd; if dataset missing → `snapshot_download` from HF dataset (fallback)
 - [x] PLAN.md living file at repo root (this file)
 - [x] HF dataset + LoRA model card uploaded with account `Shehab-Hegab`
 - [x] Token stored only in gitignored `.env` / `.hf_token` — never committed
@@ -112,7 +113,7 @@ python upload_to_hf.py --execute
 | Non-commercial license + claim language | DONE |
 | upload_to_hf.py + model card + HF URLs docs | DONE |
 | Tests + lint | GREEN (28 passed, ruff clean) |
-| GitHub push to Shehab-Hegab | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric |
+| GitHub push PUBLIC | DONE → https://github.com/Shehab-Hegab/flux-islamic-parametric (visibility PUBLIC) |
 | Multi-model orchestrate review | DONE (fixes applied) |
 | **HF dataset LIVE** | DONE → https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset |
 | **HF LoRA model card LIVE** | DONE → https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora |
@@ -120,4 +121,4 @@ python upload_to_hf.py --execute
 | Dataset expand 50–75 real+synthetic | SCAFFOLD ready (`expand_dataset.py`) — run after baseline |
 | Expert-report roadmap items | Partly DONE this session (license, metrics, checkpoints); baseline training still next |
 
-**Last updated after:** Expert-report batch — non-commercial license + claim language, `evaluate_structure.py`, `expand_dataset.py`, checkpoint/resume 250 steps, Colab resume cell (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.
+**Last updated after:** Repo made PUBLIC + Colab notebook clone/HF-dataset fallback (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.
