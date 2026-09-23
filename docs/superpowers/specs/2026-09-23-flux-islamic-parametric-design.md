@@ -44,7 +44,7 @@ Isolation rules: scripts never import each other; all shared constants live in `
 4. **Training framework:** Hugging Face `diffusers` official `examples/train_dreambooth_lora_flux.py` (natively saves `pytorch_lora_weights.safetensors`). Hyperparameters locked to spec: base `black-forest-labs/FLUX.1-dev`, **r=16, α=16, lr=1e-4, res=1024×1024, steps=800–1000 (default 800), optimizer adamw8bit**, bf16 mixed precision, gradient checkpointing.
 5. **Trigger word:** exact `in Islamic_Parametric style` appended to every caption and every eval prompt. Caption template matches spec example (photorealistic 8k architectural render, no visual distortion, geometric lattice, structural symmetry…).
 6. **Evaluation:** `inference_eval.py` builds a grid: rows = prompts (≥5, incl. cultural center facade example), cols = [base FLUX.1-dev | FLUX.1-dev + LoRA] at fixed seed (e.g. 42), 1024², saved under `eval_outputs/`. Optional `--compare-baseline` for 4-column grid (base / lora / lora+geometry-check).
-7. **HF repos:** dataset `shehab-hegab/islamic-parametric-architecture-dataset`; LoRA `shehab-hegab/flux-islamic-parametric-lora` (`pytorch_lora_weights.safetensors` + structured model card with trigger words, samples, training metadata, architectural design intent).
+7. **HF repos:** dataset `Shehab-Hegab/islamic-parametric-architecture-dataset`; LoRA `Shehab-Hegab/flux-islamic-parametric-lora` (`pytorch_lora_weights.safetensors` + structured model card with trigger words, samples, training metadata, architectural design intent).
 8. **Auth:** `HF_TOKEN` env var only; never hardcode. Unsplash key likewise env-only.
 
 ## Data flow

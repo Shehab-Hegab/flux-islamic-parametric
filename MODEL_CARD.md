@@ -6,7 +6,7 @@ zero visual hallucination intent (precise geometric structural integrity).
 
 - **Trigger word:** `in Islamic_Parametric style`
 - **Base model:** `black-forest-labs/FLUX.1-dev`
-- **Dataset:** `shehab-hegab/islamic-parametric-architecture-dataset`
+- **Dataset:** `Shehab-Hegab/islamic-parametric-architecture-dataset`
 - **Weights:** `pytorch_lora_weights.safetensors`
 
 ## Training metadata
@@ -28,7 +28,7 @@ import torch
 from diffusers import FluxPipeline
 
 pipe = FluxPipeline.from_pretrained("black-forest-labs/FLUX.1-dev", torch_dtype=torch.bfloat16)
-pipe.load_lora_weights("shehab-hegab/flux-islamic-parametric-lora", weight_name="pytorch_lora_weights.safetensors")
+pipe.load_lora_weights("Shehab-Hegab/flux-islamic-parametric-lora", weight_name="pytorch_lora_weights.safetensors")
 pipe.enable_model_cpu_offload()
 image = pipe(
     "A modern cultural center facade in Islamic_Parametric style, geometric parametric wooden panels, realistic lighting, 8k architectural photo",

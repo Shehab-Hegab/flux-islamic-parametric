@@ -34,9 +34,9 @@ Example:
   [`dataset_islamic_parametric/`](https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric)
 - **Project repo:** [`Shehab-Hegab/flux-islamic-parametric`](https://github.com/Shehab-Hegab/flux-islamic-parametric)
 - **Hugging Face dataset** (after `upload_to_hf.py --execute` with `HF_TOKEN`):
-  `https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset`
+  `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
 - **Hugging Face LoRA** (after Colab training + upload):
-  `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora`
+  `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
   - Weights file: `pytorch_lora_weights.safetensors`
 
 ## Quickstart

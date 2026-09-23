@@ -38,7 +38,7 @@ tags:
   - parametric-design
   - mashrabiya
 dataset:
-  - shehab-hegab/islamic-parametric-architecture-dataset
+  - Shehab-Hegab/islamic-parametric-architecture-dataset
 ---
 
 # FLUX.1-dev LoRA — Islamic Parametric Architecture
@@ -69,7 +69,7 @@ Example prompt:
 | Max train steps | {MAX_TRAIN_STEPS} |
 | Optimizer | {OPTIMIZER} |
 | Mixed precision | bf16 + gradient checkpointing |
-| Dataset | 25 images + captions, `shehab-hegab/islamic-parametric-architecture-dataset` |
+| Dataset | 25 images + captions, `Shehab-Hegab/islamic-parametric-architecture-dataset` |
 | Weights file | `{WEIGHTS_FILENAME}` |
 
 ## Usage
@@ -79,7 +79,7 @@ import torch
 from diffusers import FluxPipeline
 
 pipe = FluxPipeline.from_pretrained("black-forest-labs/FLUX.1-dev", torch_dtype=torch.bfloat16)
-pipe.load_lora_weights("shehab-hegab/flux-islamic-parametric-lora", weight_name="{WEIGHTS_FILENAME}")
+    pipe.load_lora_weights("Shehab-Hegab/flux-islamic-parametric-lora", weight_name="{WEIGHTS_FILENAME}")
 pipe.enable_model_cpu_offload()
 image = pipe(
     "A contemporary mosque exterior in Islamic_Parametric style, mashrabiya lattice screen, golden hour, photorealistic 8k",
@@ -151,12 +151,19 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Upload dataset + LoRA to Hugging Face.")
     parser.add_argument("--dry-run", action="store_true", default=True)
     parser.add_argument("--execute", action="store_true", help="perform real upload (requires HF_TOKEN)")
+    parser.add_argument(
+        "--dataset-only",
+        action="store_true",
+        help="upload dataset only (skip LoRA weights; use before training completes)",
+    )
     parser.add_argument("--dataset-dir", default=DATASET_DIR)
     parser.add_argument("--weights", default=str(Path(OUTPUT_DIR) / WEIGHTS_FILENAME))
     args = parser.parse_args(argv)
 
     weights = Path(args.weights)
     plan = plan_uploads(Path(args.dataset_dir), weights)
+    if args.dataset_only:
+        plan = [item for item in plan if item["type"] == "dataset"]
     if not args.execute:
         print("DRY RUN — no files will be uploaded")
         for item in plan:
@@ -172,8 +179,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  lora:    https://huggingface.co/{LORA_REPO_ID}")
         return 0
 
-    if not weights.exists():
-        print(f"[error] weights not found: {weights} — train first or pass --weights", file=sys.stderr)
+    if not args.dataset_only:
+        if not weights.exists():
+            print(
+                f"[error] weights not found: {weights} — train first or pass --weights "
+                f"(or use --dataset-only)",
+                file=sys.stderr,
+            )
+            return 1
+    elif not Path(args.dataset_dir).is_dir():
+        print(f"[error] dataset dir missing: {args.dataset_dir}", file=sys.stderr)
         return 1
     try:
         run_upload(plan)

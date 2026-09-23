@@ -26,8 +26,8 @@ OUTPUT_DIR = "output"
 WEIGHTS_FILENAME = "pytorch_lora_weights.safetensors"
 TRAIN_SCRIPT = "training/train_dreambooth_lora_flux.py"
 
-DATASET_REPO_ID = "shehab-hegab/islamic-parametric-architecture-dataset"
-LORA_REPO_ID = "shehab-hegab/flux-islamic-parametric-lora"
+DATASET_REPO_ID = "Shehab-Hegab/islamic-parametric-architecture-dataset"
+LORA_REPO_ID = "Shehab-Hegab/flux-islamic-parametric-lora"
 
 CAPTION_PREFIX = f"A detailed architectural photo {TRIGGER_WORD}"
 CAPTION_SUFFIX = (

@@ -14,7 +14,7 @@
 - Dataset dir: `dataset_islamic_parametric/` — exactly 25 images, each ≥1024×1024
 - Base model: `black-forest-labs/FLUX.1-dev`; LoRA r=16, α=16, lr=1e-4, res=1024×1024, steps=800 (range 800–1000), optimizer `adamw8bit`
 - Output weights filename: `pytorch_lora_weights.safetensors`
-- HF repos: `shehab-hegab/islamic-parametric-architecture-dataset`, `shehab-hegab/flux-islamic-parametric-lora`
+- HF repos: `Shehab-Hegab/islamic-parametric-architecture-dataset`, `Shehab-Hegab/flux-islamic-parametric-lora`
 - Secrets only via env (`UNSPLASH_ACCESS_KEY`, `HF_TOKEN`); never hardcoded
 - No code comments unless self-evident docstrings for public CLI help
 - ruff clean; pytest green; commit after each task
@@ -41,8 +41,8 @@ LEARNING_RATE: float  # 1e-4
 RESOLUTION: int    # 1024
 MAX_TRAIN_STEPS: int  # 800
 OPTIMIZER: str     # "adamw8bit"
-DATASET_REPO_ID: str  # "shehab-hegab/islamic-parametric-architecture-dataset"
-LORA_REPO_ID: str     # "shehab-hegab/flux-islamic-parametric-lora"
+DATASET_REPO_ID: str  # "Shehab-Hegab/islamic-parametric-architecture-dataset"
+LORA_REPO_ID: str     # "Shehab-Hegab/flux-islamic-parametric-lora"
 WEIGHTS_FILENAME: str # "pytorch_lora_weights.safetensors"
 EVAL_PROMPTS: list[str]  # ≥5 prompts, each containing TRIGGER_WORD
 CAPTION_SUFFIX: str      # architectural quality suffix incl. trigger word
@@ -122,9 +122,9 @@ def train_dry_run_command(instance_dir: str, output_dir: str) -> str  # returns 
 
 **Interfaces:**
 - Consumes: dataset dir, `output/pytorch_lora_weights.safetensors` (optional for dry-run), tokens from env
-- Produces: default `--dry-run` prints exact `HfApi.upload_folder`/`create_repo` plan for both repos; `--execute` requires `HF_TOKEN`, uploads dataset folder (images+captions+manifest) → `shehab-hegab/islamic-parametric-architecture-dataset`, uploads weights+`MODEL_CARD.md` as `README.md` → `shehab-hegab/flux-islamic-parametric-lora`
+- Produces: default `--dry-run` prints exact `HfApi.upload_folder`/`create_repo` plan for both repos; `--execute` requires `HF_TOKEN`, uploads dataset folder (images+captions+manifest) → `Shehab-Hegab/islamic-parametric-architecture-dataset`, uploads weights+`MODEL_CARD.md` as `README.md` → `Shehab-Hegab/flux-islamic-parametric-lora`
 - README/MODEL_CARD content: trigger words section, sample caption, training metadata table (r/α/lr/steps/res/optimizer/base), architectural design intent, usage snippet (`pipe.load_lora_weights`), dataset preview, eval description
-- `docs/HF_URLS.md`: exact URLs `https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset`, `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora`, file deep-links (`/blob/main/pytorch_lora_weights.safetensors`, dataset `/blob/main/image_01.jpg`, captions path)
+- `docs/HF_URLS.md`: exact URLs `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`, `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`, file deep-links (`/blob/main/pytorch_lora_weights.safetensors`, dataset `/blob/main/image_01.jpg`, captions path)
 
 - [ ] Step 1: Failing tests: dry-run main exit 0 mentions both repo IDs + weights filename + "DRY RUN"; README.md exists and contains trigger word, both repo IDs, `pytorch_lora_weights.safetensors`, hyperparams 16/16/1e-4/800/1024/adamw8bit; FAIL first.
 - [ ] Step 2: Implement upload + write README/MODEL_CARD/HF_URLS.

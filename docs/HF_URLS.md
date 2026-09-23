@@ -23,11 +23,11 @@ These return 401/404 until `HF_TOKEN` is set and `python upload_to_hf.py --execu
 (dataset + LoRA after Colab training). Do **not** paste them as working links until then.
 
 - Dataset (planned):
-  `https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset`
+  `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
 - LoRA (planned):
-  `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora`
+  `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
 - Weights resolve (planned):
-  `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora/resolve/main/pytorch_lora_weights.safetensors`
+  `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora/resolve/main/pytorch_lora_weights.safetensors`
 
 ## Base model (upstream)
 
@@ -44,6 +44,6 @@ Body:
 2. Full pipeline repo (training, eval, upload scripts, Colab):
    https://github.com/Shehab-Hegab/flux-islamic-parametric
 3. Hugging Face LoRA (after training upload):
-   https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora
+   https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora
 
 Trigger word: `in Islamic_Parametric style`
