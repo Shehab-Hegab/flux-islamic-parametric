@@ -1,0 +1,9 @@
+pillow>=10.0
+requests>=2.31
+huggingface_hub>=0.23
+transformers>=4.45.0
+diffusers>=0.31.0
+accelerate>=0.31.0
+safetensors>=0.4.0
+pytest>=8.0
+ruff>=0.5.0

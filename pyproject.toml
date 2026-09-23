@@ -1,0 +1,27 @@
+[project]
+name = "islamic-parametric-flux"
+version = "1.0.0"
+description = "FLUX.1-dev LoRA pipeline for Islamic Parametric Architecture"
+requires-python = ">=3.10"
+dependencies = [
+    "pillow>=10.0",
+    "requests>=2.31",
+    "huggingface_hub>=0.23",
+]
+
+[project.optional-dependencies]
+train = ["diffusers>=0.31.0", "accelerate>=0.31.0", "safetensors>=0.4.0", "transformers>=4.45.0"]
+dev = ["pytest>=8.0", "ruff>=0.5.0"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
