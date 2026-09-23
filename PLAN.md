@@ -73,6 +73,7 @@
 ### Phase 8 — Delivery (DONE except LoRA weights upload)
 - [x] GitHub repo created + pushed + made **PUBLIC** (Colab clone failed while private): `https://github.com/Shehab-Hegab/flux-islamic-parametric`
 - [x] Colab notebook: clone + flatten to cwd; if dataset missing → `snapshot_download` from HF dataset (fallback)
+- [x] Colab pip cell installs **diffusers from git main** (script needs `check_min_version 0.41.0.dev0`; PyPI only has 0.40.0)
 - [x] PLAN.md living file at repo root (this file)
 - [x] HF dataset + LoRA model card uploaded with account `Shehab-Hegab`
 - [x] Token stored only in gitignored `.env` / `.hf_token` — never committed
@@ -121,4 +122,4 @@ python upload_to_hf.py --execute
 | Dataset expand 50–75 real+synthetic | SCAFFOLD ready (`expand_dataset.py`) — run after baseline |
 | Expert-report roadmap items | Partly DONE this session (license, metrics, checkpoints); baseline training still next |
 
-**Last updated after:** Repo made PUBLIC + Colab notebook clone/HF-dataset fallback (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.
+**Last updated after:** Colab `diffusers` git install fix for `check_min_version("0.41.0.dev0")` (session 2026-09-23). Next: baseline training on Colab T4, then weights upload.
