@@ -21,15 +21,19 @@
 - [x] Implementation plan `docs/superpowers/plans/2026-09-23-flux-islamic-parametric-pipeline.md`
 - [x] pyproject (ruff), .gitignore, requirements.txt, `src/islamic_parametric/{__init__,constants}.py` (73d3852)
 
-### Phase 2 — Dataset (DONE)
-- [x] `download_or_synthetic_dataset.py` hybrid Unsplash→synthetic
-- [x] 25 images ≥1024×1024 generated + `manifest.json` committed (25f100b)
-- [x] Tests green
+### Phase 2 — Dataset (REPLACED — free-license real photos)
+- [x] Legacy `download_or_synthetic_dataset.py` hybrid Unsplash→synthetic (superseded)
+- [x] Synthetic set rejected (dark/flat/duplicated) → replaced
+- [x] **Live set:** 25 unique bright free-license photos (`finalize_dataset.py`), mean luma 112.9, 0 md5/phash dups, `manifest.json` attribution
+- [x] Quality report PASS (`eval_outputs/dataset_quality_report.json`)
+- [x] Official review sheet `dataset_islamic_parametric/_contact_sheet_review.jpg` (stale `_contact_sheet_25` / `_contact_sheet_curation` deleted)
+- [x] Tests green (36)
 
 ### Phase 3 — Captions (DONE)
 - [x] `generate_captions.py` with auto/florence/template backends (a7b1853)
 - [x] Florence-2-large fixed for transformers 4.57 (SDPA property patch + greedy `use_cache=False` + remote processor); einops/timm installed
-- [x] 25 unique Florence captions with trigger verified → ruff+pytest green
+- [x] 25 unique captions with trigger verified → ruff+pytest green
+- [x] Caption contract via `build_caption` + `no visual distortion` suffix kept
 
 ### Phase 4 — Training (DONE)
 - [x] `train_flux_lora.py` wrapper (`--dry-run`, `--fetch-script`, CUDA gate)
@@ -55,7 +59,8 @@
 ### Phase 6 — HF upload + docs (DONE)
 - [x] `upload_to_hf.py` dry-run verified (both repos + URLs)
 - [x] `MODEL_CARD.md`, `README.md`, `docs/HF_URLS.md`
-- [x] **Dataset LIVE on HF** (25 jpg + 25 captions + manifest = 52 files): `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
+- [x] **Dataset LIVE on HF** (25 jpg + 25 captions + manifest): `https://huggingface.co/datasets/Shehab-Hegab/islamic-parametric-architecture-dataset`
+- [x] `upload_to_hf.py` now **purges stale remote files** before upload (`--dataset-only --execute` = full replace with new free-license set)
 - [x] **LoRA repo + model card LIVE**: `https://huggingface.co/Shehab-Hegab/flux-islamic-parametric-lora`
 - [ ] Upload `pytorch_lora_weights.safetensors` after Colab training (`python upload_to_hf.py --execute` with weights present)
 
@@ -96,8 +101,8 @@ python upload_to_hf.py --execute
 ## Status summary
 | Deliverable | Status |
 |---|---|
-| Dataset 25×≥1024² + manifest | DONE |
-| Captions Florence-2 (25 unique + trigger) | DONE |
+| Dataset 25 free-license photos + manifest | DONE (quality PASS) |
+| Captions (25 unique + trigger) | DONE |
 | train_flux_lora.py + vendored diffusers script | DONE |
 | Colab notebook | DONE |
 | inference_eval.py | DONE |

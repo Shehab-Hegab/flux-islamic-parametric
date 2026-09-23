@@ -121,6 +121,29 @@ def plan_uploads(dataset_dir: Path, weights: Path) -> list[dict]:
     ]
 
 
+def _replace_dataset_folder(api, item: dict) -> None:
+    """Upload local dataset and remove any remote files not present locally."""
+    repo_id = item["repo_id"]
+    folder = Path(item["folder"])
+    api.create_repo(repo_id, repo_type="dataset", exist_ok=True, private=False)
+
+    keep = {p.name for p in folder.iterdir() if p.is_file()}
+    keep.update({"README.md", ".gitattributes"})
+    remote = list(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
+    stale = [f for f in remote if f not in keep]
+    if stale:
+        api.delete_files(repo_id=repo_id, repo_type="dataset", path_or_fileobj=stale)
+        print(f"removed {len(stale)} stale remote file(s) from {repo_id}")
+
+    api.upload_folder(
+        folder_path=str(folder),
+        repo_id=repo_id,
+        repo_type="dataset",
+        ignore_patterns=[".git*", "__pycache__", ".env*"],
+    )
+    print(f"uploaded dataset -> {repo_id}")
+
+
 def run_upload(plan: list[dict], *, card_only: bool = False) -> None:
     from huggingface_hub import HfApi
 
@@ -130,14 +153,7 @@ def run_upload(plan: list[dict], *, card_only: bool = False) -> None:
     api = HfApi(token=token)
     for item in plan:
         if item["type"] == "dataset":
-            api.create_repo(item["repo_id"], repo_type="dataset", exist_ok=True, private=False)
-            api.upload_folder(
-                folder_path=item["folder"],
-                repo_id=item["repo_id"],
-                repo_type="dataset",
-                ignore_patterns=[".git*", "__pycache__", ".env*"],
-            )
-            print(f"uploaded dataset -> {item['repo_id']}")
+            _replace_dataset_folder(api, item)
         else:
             api.create_repo(item["repo_id"], exist_ok=True, private=False)
             card = _model_card()

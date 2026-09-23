@@ -18,8 +18,9 @@ Example:
 
 | Path | Purpose |
 |---|---|
-| `dataset_islamic_parametric/` | 25 images ≥1024×1024 + `captions/*.txt` + `manifest.json` |
-| `download_or_synthetic_dataset.py` | Hybrid builder: Unsplash API → procedural mashrabiya synthetic fallback |
+| `dataset_islamic_parametric/` | 25 curated free-license photos ≥1024×1024 + `captions/*.txt` + `manifest.json` |
+| `finalize_dataset.py` | Dedup + renumber + caption + contact sheet + quality report (`--check`/`--execute`) |
+| `download_or_synthetic_dataset.py` | Legacy hybrid builder (Unsplash → synthetic fallback) |
 | `generate_captions.py` | Florence-2-large captions with deterministic template fallback |
 | `train_flux_lora.py` | FLUX DreamBooth LoRA wrapper (`--dry-run` / Colab GPU run) |
 | `training/train_dreambooth_lora_flux.py` | Official diffusers training script (vendored) |
@@ -44,15 +45,15 @@ Example:
 ```bash
 pip install -r requirements.txt
 
-# 1) Dataset (Unsplash if UNSPLASH_ACCESS_KEY set, else synthetic — always yields 25 ≥1024²)
-python download_or_synthetic_dataset.py --prefer hybrid
+# 1) Dataset already in-repo: 25 unique bright free-license photos + captions + manifest
+python finalize_dataset.py --check
 
-# 2) Captions (auto: Florence-2 if available, else template)
+# 2) Re-caption / regenerate quality report if needed (auto: Florence-2 if available, else template)
 python generate_captions.py --backend auto
 
 # 3) Training preview (local) / real run (Colab notebook)
 python train_flux_lora.py --dry-run
-jupyter nbconvert --to notebook --execute Flux_Architectural_LoRA_Training.ipynb  # or open in Colab
+# Open Flux_Architectural_LoRA_Training.ipynb in Google Colab (T4 GPU)
 
 # 4) Evaluation grid + structural metrics
 python inference_eval.py --check
@@ -62,7 +63,8 @@ python evaluate_structure.py --images dataset_islamic_parametric --limit 5
 
 # 5) Upload (dry-run first; --execute requires HF_TOKEN)
 python upload_to_hf.py --dry-run
-python upload_to_hf.py --execute
+python upload_to_hf.py --dataset-only --execute   # replace remote dataset (purges stale files)
+python upload_to_hf.py --execute                 # after Colab training produces weights
 ```
 
 ## Training metadata
@@ -96,11 +98,13 @@ we measure structural properties instead.
   the FLUX.1-dev non-commercial license — commercial deployment/API/SaaS requires a separate
   BFL license. See https://huggingface.co/black-forest-labs/FLUX.1-dev
 - Do not present this adapter as commercially deployable.
-- Unsplash images follow the Unsplash API license; synthetic images are generated in-repo;
-  extend `manifest.json` with author/license/URL for any third-party photos.
+- Training photos are **free-license only** (CC0 / CC BY / CC BY-SA / Public Domain) with
+  author + source URL recorded in `manifest.json`. See the dataset README / HF card for
+  full attribution. No synthetic top-up in the live set.
 
 ## Dataset + caption contract
 
+- 25 unique free-license photos (mean luma ≈ 113, no md5/phash duplicates) + quality report
 - 25 unique captions; every caption contains `in Islamic_Parametric style`
 - Caption skeleton: *A detailed architectural photo in Islamic_Parametric style, featuring …,
   precise geometric lattice patterns, daylighting, structural symmetry, photorealistic 8k
@@ -110,7 +114,7 @@ we measure structural properties instead.
 
 | Var | Used by | Notes |
 |---|---|---|
-| `UNSPLASH_ACCESS_KEY` | dataset builder | optional; synthetic fallback if unset |
+| `UNSPLASH_ACCESS_KEY` | legacy dataset builder | optional; not required for the live free-license set |
 | `HF_TOKEN` | training (gated FLUX), upload | never commit tokens |
 
 ## Tests & lint
@@ -124,5 +128,5 @@ python -m pytest -q
 
 - **Non-commercial research / portfolio demo only.** FLUX.1-dev and derivatives (this LoRA)
   are under the FLUX.1-dev non-commercial license — commercial use needs a separate BFL license.
-- Unsplash images follow the Unsplash API license; synthetic images are generated in-repo;
-  third-party photos must record author/license/URL in `manifest.json`.
+- Dataset photos: free licenses only (CC0 / CC BY / CC BY-SA / Public Domain); attribution
+  in `manifest.json` (`author`, `license`, `source_url`).
