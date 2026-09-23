@@ -5,9 +5,10 @@
 **Goal:** Production-grade HF repo: 25-image Islamic Parametric dataset + captions + FLUX.1-dev LoRA training pipeline + eval grids + HF upload scripts, portfolio-ready for Dr. Mai Soliman review.
 
 **Target repos**
-- Dataset: `https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset`
-- LoRA: `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora`
-- GitHub: `https://github.com/Shehab-Hegab` (push target)
+- Dataset (LIVE on GitHub — real data): `https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric`
+- Project: `https://github.com/Shehab-Hegab/flux-islamic-parametric`
+- HF dataset (PENDING upload): `https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset`
+- HF LoRA (PENDING upload): `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora`
 
 **Locked hyperparameters:** base `black-forest-labs/FLUX.1-dev`, r=16, α=16, lr=1e-4, res=1024, steps=800, optimizer=adamw8bit, bf16, trigger `in Islamic_Parametric style`.
 

@@ -28,11 +28,16 @@ Example:
 | `upload_to_hf.py` | Dry-run / `--execute` upload of dataset + LoRA |
 | `src/islamic_parametric/constants.py` | Single source of truth: trigger, hyperparams, repo IDs |
 
-## Hugging Face repositories
+## Where the data lives (verified links)
 
-- **Dataset:** [`shehab-hegab/islamic-parametric-architecture-dataset`](https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset)
-- **LoRA adapter:** [`shehab-hegab/flux-islamic-parametric-lora`](https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora)
-  - Weights: `pytorch_lora_weights.safetensors`
+- **Dataset (25 images + captions + manifest) — GitHub (live):**
+  [`dataset_islamic_parametric/`](https://github.com/Shehab-Hegab/flux-islamic-parametric/tree/main/dataset_islamic_parametric)
+- **Project repo:** [`Shehab-Hegab/flux-islamic-parametric`](https://github.com/Shehab-Hegab/flux-islamic-parametric)
+- **Hugging Face dataset** (after `upload_to_hf.py --execute` with `HF_TOKEN`):
+  `https://huggingface.co/datasets/shehab-hegab/islamic-parametric-architecture-dataset`
+- **Hugging Face LoRA** (after Colab training + upload):
+  `https://huggingface.co/shehab-hegab/flux-islamic-parametric-lora`
+  - Weights file: `pytorch_lora_weights.safetensors`
 
 ## Quickstart
 
