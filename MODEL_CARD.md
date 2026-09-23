@@ -9,7 +9,7 @@ FLUX.1-dev non-commercial license.
 
 - **Trigger word:** `in Islamic_Parametric style`
 - **Base model:** `black-forest-labs/FLUX.1-dev`
-- **Dataset:** `Shehab-Hegab/islamic-parametric-architecture-dataset` (25 free-license photos)
+- **Dataset:** `Shehab-Hegab/islamic-parametric-architecture-dataset` (25 free-license photos) (25 free-license photos)
 - **Weights:** `pytorch_lora_weights.safetensors`
 
 ## Training metadata
@@ -50,5 +50,5 @@ Preserve modular rhythm, bilateral symmetry, and lattice topology across generat
 evaluation grids (seed 42) compare base FLUX.1-dev against this adapter side-by-side to
 verify geometric structural logic.
 
-See the source repository for `inference_eval.py`, dataset builder, captioning, and the
+See the source repository for `inference_eval.py`, `finalize_dataset.py`, captioning, and the
 Colab notebook `Flux_Architectural_LoRA_Training.ipynb`.
